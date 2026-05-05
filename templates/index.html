@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}Sākumlapa - EVL 2. Vīriešu Līga{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient-to-r from-blue-800 to-blue-900 text-white py-16">
+    <div class="container mx-auto px-4">
+        <div class="text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                Entuziastu Volejbola<br>Otrā Vīriešu Līga
+            </h1>
+            <p class="text-xl text-blue-200 mb-8">
+                Latvijas spēcīgākā amatieru volejbola čempionāta otrā līga
+            </p>
+            <div class="flex justify-center gap-4 flex-wrap">
+                <a href="{{ url_for('schedule') }}" class="bg-orange-500 hover:bg-orange-600 px-6 py-3 rounded-lg font-semibold transition">
+                    Spēļu Grafiks
+                </a>
+                <a href="{{ url_for('teams') }}" class="bg-white text-blue-800 hover:bg-gray-100 px-6 py-3 rounded-lg font-semibold transition">
+                    Komandu Tabula
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container mx-auto px-4 py-8">
+    <!-- Standings Section -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+            <svg class="w-6 h-6 mr-2 text-orange-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+            </svg>
+            Kopvērtējuma Tabula
+        </h2>
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-800 text-white">
+                        <tr>
+                            <th class="px-4 py-3 text-left">#</th>
+                            <th class="px-4 py-3 text-left">Komanda</th>
+                            <th class="px-4 py-3 text-center">SP</th>
+                            <th class="px-4 py-3 text-center">U</th>
+                            <th class="px-4 py-3 text-center">Z</th>
+                            <th class="px-4 py-3 text-center">P</th>
+                            <th class="px-4 py-3 text-center hidden sm:table-cell">GS</th>
+                            <th class="px-4 py-3 text-center hidden sm:table-cell">ZA</th>
+                            <th class="px-4 py-3 text-center hidden md:table-cell">Att.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for team in standings %}
+                        <tr class="border-b hover:bg-gray-50 transition">
+                            <td class="px-4 py-3 font-bold {% if loop.index <= 3 %}text-orange-500{% endif %}">
+                                {{ loop.index }}
+                            </td>
+                            <td class="px-4 py-3 font-medium">{{ team.name }}</td>
+                            <td class="px-4 py-3 text-center">{{ team.played }}</td>
+                            <td class="px-4 py-3 text-center text-green-600 font-semibold">{{ team.won }}</td>
+                            <td class="px-4 py-3 text-center text-red-600">{{ team.lost }}</td>
+                            <td class="px-4 py-3 text-center font-bold text-blue-800">{{ team.points }}</td>
+                            <td class="px-4 py-3 text-center hidden sm:table-cell">{{ team.sets_won }}</td>
+                            <td class="px-4 py-3 text-center hidden sm:table-cell">{{ team.sets_lost }}</td>
+                            <td class="px-4 py-3 text-center hidden md:table-cell">
+                                {% if team.sets_won + team.sets_lost > 0 %}
+                                    {{ "%.2f"|format(team.sets_won / (team.sets_won + team.sets_lost) * 100) }}%
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="px-4 py-2 bg-gray-100 text-xs text-gray-600">
+                SP - Spēles, U - Uzvaras, Z - Zaudējumi, P - Punkti, GS - Iegūtie seti, ZA - Zaudētie seti, Att. - Attiecība
+            </div>
+        </div>
+    </section>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Recent Games -->
+        <section>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-2 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                Nesenās Spēles
+            </h2>
+            <div class="space-y-4">
+                {% for game in recent_games %}
+                <div class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm text-gray-500">{{ game.date }} {{ game.time }}</span>
+                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Pabeigta</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div class="text-center flex-1">
+                            <div class="font-semibold text-lg">{{ game.home_team }}</div>
+                            <div class="text-2xl font-bold text-blue-800">{{ game.home_score }}</div>
+                        </div>
+                        <div class="text-gray-400 px-4">:</div>
+                        <div class="text-center flex-1">
+                            <div class="font-semibold text-lg">{{ game.away_team }}</div>
+                            <div class="text-2xl font-bold text-blue-800">{{ game.away_score }}</div>
+                        </div>
+                    </div>
+                    <div class="text-center text-sm text-gray-500 mt-2">
+                        Seti: <span class="font-medium">{{ game.home_sets }}:{{ game.away_sets }}</span>
+                        | {{ game.location }}
+                    </div>
+                </div>
+                {% else %}
+                <div class="bg-white rounded-lg shadow-md p-8 text-center text-gray-500">
+                    Nav spēļu dati
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Upcoming Games -->
+        <section>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-2 text-orange-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                </svg>
+                Tuvākās Spēles
+            </h2>
+            <div class="space-y-4">
+                {% for game in upcoming_games %}
+                <div class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm text-gray-500">{{ game.date }} {{ game.time }}</span>
+                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Drīz</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div class="text-center flex-1">
+                            <div class="font-semibold text-lg">{{ game.home_team }}</div>
+                            <div class="text-gray-400">Mājās</div>
+                        </div>
+                        <div class="text-gray-400 px-4">vs</div>
+                        <div class="text-center flex-1">
+                            <div class="font-semibold text-lg">{{ game.away_team }}</div>
+                            <div class="text-gray-400">Viesos</div>
+                        </div>
+                    </div>
+                    <div class="text-center text-sm text-gray-500 mt-2">
+                        {{ game.location }}
+                    </div>
+                </div>
+                {% else %}
+                <div class="bg-white rounded-lg shadow-md p-8 text-center text-gray-500">
+                    Nav ieplānotu spēļu
+                </div>
+                {% endfor %}
+            </div>
+            <a href="{{ url_for('schedule') }}" class="block mt-4 text-center text-blue-600 hover:text-blue-800 font-medium">
+                Skatīt visas spēles →
+            </a>
+        </section>
+    </div>
+
+    <!-- Top Players Section -->
+    <section class="mt-12">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+            <svg class="w-6 h-6 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            Spēlētāji
+        </h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            {% for player in top_players %}
+            <div class="bg-white rounded-lg shadow-md p-4 text-center hover:shadow-lg transition">
+                <div class="bg-blue-100 rounded-full w-16 h-16 mx-auto mb-3 flex items-center justify-center">
+                    <span class="text-2xl">🏐</span>
+                </div>
+                <div class="font-semibold">{{ player.first_name }} {{ player.last_name }}</div>
+                <div class="text-sm text-gray-500">{{ player.position }}</div>
+                <div class="text-xs text-blue-600 mt-1">{{ player.team_name }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="{{ url_for('players') }}" class="block mt-6 text-center">
+            <span class="bg-blue-800 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-900 transition inline-block">
+                Skatīt visus spēlētājus
+            </span>
+        </a>
+    </section>
+</div>
+{% endblock %}

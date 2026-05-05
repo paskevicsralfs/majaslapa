@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}Spēļu Grafiks - EVL 2. Vīriešu Līga{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Spēļu Grafiks</h1>
+
+    <!-- Tabs -->
+    <div class="flex justify-center mb-8">
+        <div class="inline-flex rounded-lg shadow-md overflow-hidden">
+            <button onclick="showTab('upcoming')" id="tab-upcoming" class="tab-btn px-6 py-3 bg-blue-800 text-white font-medium">
+                Nākotnes Spēles
+            </button>
+            <button onclick="showTab('completed')" id="tab-completed" class="tab-btn px-6 py-3 bg-gray-200 text-gray-700 font-medium">
+                Aizvadītās Spēles
+            </button>
+        </div>
+    </div>
+
+    <!-- Upcoming Games -->
+    <div id="upcoming-games" class="game-section">
+        <h2 class="text-xl font-bold text-gray-800 mb-6">Nākotnes Spēles</h2>
+        <div class="space-y-4">
+            {% for game in scheduled_games %}
+            <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-4">
+                    <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                            📅 {{ game.date }}
+                        </span>
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">
+                            ⏰ {{ game.time }}
+                        </span>
+                    </div>
+                    <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium">
+                        📍 {{ game.location }}
+                    </span>
+                </div>
+                <div class="flex justify-between items-center text-center">
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-blue-800">{{ game.home_team }}</h3>
+                        <p class="text-sm text-gray-500">Mājās</p>
+                    </div>
+                    <div class="px-8">
+                        <span class="text-3xl font-bold text-gray-300">VS</span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-blue-800">{{ game.away_team }}</h3>
+                        <p class="text-sm text-gray-500">Viesos</p>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="bg-white rounded-lg shadow-md p-12 text-center text-gray-500">
+                Nav ieplānotu spēļu
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Completed Games -->
+    <div id="completed-games" class="game-section hidden">
+        <h2 class="text-xl font-bold text-gray-800 mb-6">Aizvadītās Spēles</h2>
+        <div class="space-y-4">
+            {% for game in completed_games %}
+            <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-4">
+                    <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                            📅 {{ game.date }}
+                        </span>
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">
+                            ⏰ {{ game.time }}
+                        </span>
+                    </div>
+                    <span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm">
+                        📍 {{ game.location }}
+                    </span>
+                </div>
+                <div class="flex justify-between items-center text-center">
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold {% if game.home_score > game.away_score %}text-green-600{% else %}text-gray-700{% endif %}">
+                            {{ game.home_team }}
+                        </h3>
+                        <div class="text-4xl font-bold text-blue-800 mt-2">{{ game.home_score }}</div>
+                    </div>
+                    <div class="px-4">
+                        <span class="text-lg text-gray-400">:</span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold {% if game.away_score > game.home_score %}text-green-600{% else %}text-gray-700{% endif %}">
+                            {{ game.away_team }}
+                        </h3>
+                        <div class="text-4xl font-bold text-blue-800 mt-2">{{ game.away_score }}</div>
+                    </div>
+                </div>
+                <div class="mt-4 text-center text-sm text-gray-500">
+                    Seti: <span class="font-bold">{{ game.home_sets }}:{{ game.away_sets }}</span>
+                </div>
+            </div>
+            {% else %}
+            <div class="bg-white rounded-lg shadow-md p-12 text-center text-gray-500">
+                Nav aizvadītu spēļu
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Back Link -->
+    <div class="mt-8 text-center">
+        <a href="{{ url_for('index') }}" class="text-blue-600 hover:text-blue-800 font-medium">
+            ← Atpakaļ uz sākumlapu
+        </a>
+    </div>
+</div>
+
+<script>
+function showTab(tab) {
+    const upcoming = document.getElementById('upcoming-games');
+    const completed = document.getElementById('completed-games');
+    const upcomingBtn = document.getElementById('tab-upcoming');
+    const completedBtn = document.getElementById('tab-completed');
+
+    if (tab === 'upcoming') {
+        upcoming.classList.remove('hidden');
+        completed.classList.add('hidden');
+        upcomingBtn.classList.add('bg-blue-800', 'text-white');
+        upcomingBtn.classList.remove('bg-gray-200', 'text-gray-700');
+        completedBtn.classList.add('bg-gray-200', 'text-gray-700');
+        completedBtn.classList.remove('bg-blue-800', 'text-white');
+    } else {
+        upcoming.classList.add('hidden');
+        completed.classList.remove('hidden');
+        completedBtn.classList.add('bg-blue-800', 'text-white');
+        completedBtn.classList.remove('bg-gray-200', 'text-gray-700');
+        upcomingBtn.classList.add('bg-gray-200', 'text-gray-700');
+        upcomingBtn.classList.remove('bg-blue-800', 'text-white');
+    }
+}
+</script>
+{% endblock %}

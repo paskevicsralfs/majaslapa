@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Rediģēt Spēlētāju - EVL 2. Vīriešu Līga{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">Rediģēt Spēlētāju</h1>
+            <a href="{{ url_for('admin_players') }}" class="text-blue-600 hover:text-blue-800">
+                ← Atpakaļ
+            </a>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-8">
+            <form method="POST" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2" for="first_name">Vārds *</label>
+                        <input type="text" id="first_name" name="first_name" required
+                            value="{{ player.first_name }}"
+                            class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2" for="last_name">Uzvārds *</label>
+                        <input type="text" id="last_name" name="last_name" required
+                            value="{{ player.last_name }}"
+                            class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2" for="position">Pozīcija *</label>
+                    <select id="position" name="position" required
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                        <option value="">Izvēlies...</option>
+                        <option value="Citurpuses" {% if player.position == 'Citurpuses' %}selected{% endif %}>Citurpuses</option>
+                        <option value="Otrās Kājas" {% if player.position == 'Otrās Kājas' %}selected{% endif %}>Otrās Kājas</option>
+                        <option value="Centrs" {% if player.position == 'Centrs' %}selected{% endif %}>Centrs</option>
+                        <option value="Piecgajiens" {% if player.position == 'Piecgajiens' %}selected{% endif %}>Piecgajiens</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2" for="team_id">Komanda *</label>
+                    <select id="team_id" name="team_id" required
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                        <option value="">Izvēlies...</option>
+                        {% for team in teams %}
+                        <option value="{{ team.id }}" {% if player.team_id == team.id %}selected{% endif %}>
+                            {{ team.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2" for="phone">Telefons</label>
+                    <input type="text" id="phone" name="phone"
+                        value="{{ player.phone or '' }}"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                </div>
+
+                <div class="flex space-x-4">
+                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition">
+                        Saglabāt Izmaiņas
+                    </button>
+                    <a href="{{ url_for('admin_players') }}"
+                        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 px-6 rounded-lg text-center transition">
+                        Atcelt
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
