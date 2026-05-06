@@ -6,7 +6,7 @@
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Spēļu Grafiks</h1>
 
-    <!-- Tabs -->
+     {#sakums#}
     <div class="flex justify-center mb-8">
         <div class="inline-flex rounded-lg shadow-md overflow-hidden">
             <button onclick="showTab('upcoming')" id="tab-upcoming" class="tab-btn px-6 py-3 bg-blue-800 text-white font-medium">
@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <!-- Upcoming Games -->
+     {#nakotnes speles #}
     <div id="upcoming-games" class="game-section">
         <h2 class="text-xl font-bold text-gray-800 mb-6">Nākotnes Spēles</h2>
         <div class="space-y-4">
@@ -27,27 +27,25 @@
                 <div class="flex flex-col md:flex-row justify-between items-center mb-4">
                     <div class="flex items-center space-x-4 mb-4 md:mb-0">
                         <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
-                            📅 {{ game.date }}
+                             {{ game.date }}
                         </span>
                         <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">
-                            ⏰ {{ game.time }}
+                             {{ game.time }}
                         </span>
                     </div>
                     <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium">
-                        📍 {{ game.location }}
+                         {{ game.location }}
                     </span>
                 </div>
                 <div class="flex justify-between items-center text-center">
                     <div class="flex-1">
                         <h3 class="text-xl font-bold text-blue-800">{{ game.home_team }}</h3>
-                        <p class="text-sm text-gray-500">Mājās</p>
                     </div>
                     <div class="px-8">
                         <span class="text-3xl font-bold text-gray-300">VS</span>
                     </div>
                     <div class="flex-1">
                         <h3 class="text-xl font-bold text-blue-800">{{ game.away_team }}</h3>
-                        <p class="text-sm text-gray-500">Viesos</p>
                     </div>
                 </div>
             </div>
@@ -59,7 +57,7 @@
         </div>
     </div>
 
-    <!-- Completed Games -->
+    {#notikusas speles #}
     <div id="completed-games" class="game-section hidden">
         <h2 class="text-xl font-bold text-gray-800 mb-6">Aizvadītās Spēles</h2>
         <div class="space-y-4">
@@ -68,14 +66,14 @@
                 <div class="flex flex-col md:flex-row justify-between items-center mb-4">
                     <div class="flex items-center space-x-4 mb-4 md:mb-0">
                         <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                            📅 {{ game.date }}
+                             {{ game.date }}
                         </span>
                         <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">
-                            ⏰ {{ game.time }}
+                             {{ game.time }}
                         </span>
                     </div>
                     <span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm">
-                        📍 {{ game.location }}
+                         {{ game.location }}
                     </span>
                 </div>
                 <div class="flex justify-between items-center text-center">
@@ -86,7 +84,6 @@
                         <div class="text-4xl font-bold text-blue-800 mt-2">{{ game.home_score }}</div>
                     </div>
                     <div class="px-4">
-                        <span class="text-lg text-gray-400">:</span>
                     </div>
                     <div class="flex-1">
                         <h3 class="text-xl font-bold {% if game.away_score > game.home_score %}text-green-600{% else %}text-gray-700{% endif %}">
@@ -107,7 +104,7 @@
         </div>
     </div>
 
-    <!-- Back Link -->
+     {#atpakal links#} 
     <div class="mt-8 text-center">
         <a href="{{ url_for('index') }}" class="text-blue-600 hover:text-blue-800 font-medium">
             ← Atpakaļ uz sākumlapu
@@ -115,28 +112,40 @@
     </div>
 </div>
 
-<script>
-function showTab(tab) {
-    const upcoming = document.getElementById('upcoming-games');
-    const completed = document.getElementById('completed-games');
-    const upcomingBtn = document.getElementById('tab-upcoming');
-    const completedBtn = document.getElementById('tab-completed');
+<script> // Atver JavaScript koda sadaļu HTML failā
+function showTab(tab) { // Definē funkciju "showTab", kas kā ieejas parametru "tab" saņem tekstu (piemēram, 'upcoming')
+    
+    // ATRAŠANA: Nākamās 4 rindiņas atrod elementus lapā pēc to ID un piešķir tos mainīgajiem
+    const upcoming = document.getElementById('upcoming-games'); // Atrod bloku ar gaidāmajām spēlēm
+    const completed = document.getElementById('completed-games'); // Atrod bloku ar pabeigtajām spēlēm
+    const upcomingBtn = document.getElementById('tab-upcoming'); // Atrod pašu pogu "Gaidāmās spēles"
+    const completedBtn = document.getElementById('tab-completed'); // Atrod pašu pogu "Pabeigtās spēles"
 
-    if (tab === 'upcoming') {
-        upcoming.classList.remove('hidden');
-        completed.classList.add('hidden');
-        upcomingBtn.classList.add('bg-blue-800', 'text-white');
-        upcomingBtn.classList.remove('bg-gray-200', 'text-gray-700');
-        completedBtn.classList.add('bg-gray-200', 'text-gray-700');
-        completedBtn.classList.remove('bg-blue-800', 'text-white');
-    } else {
-        upcoming.classList.add('hidden');
-        completed.classList.remove('hidden');
-        completedBtn.classList.add('bg-blue-800', 'text-white');
-        completedBtn.classList.remove('bg-gray-200', 'text-gray-700');
-        upcomingBtn.classList.add('bg-gray-200', 'text-gray-700');
-        upcomingBtn.classList.remove('bg-blue-800', 'text-white');
+    // PĀRBAUDE: Pārbauda, kura sadaļa ir jāaktivizē
+    if (tab === 'upcoming') { // Ja lietotājs izvēlējies "Gaidāmās spēles":
+        
+        upcoming.classList.remove('hidden'); // Noņem klasi "hidden" (paslēpts), padarot gaidāmās spēles redzamas
+        completed.classList.add('hidden'); // Pievieno klasi "hidden", paslēpjot pabeigtās spēles
+        
+        // POGU STILA MAIŅA (Lai vizuāli redzētu, kura poga ir nospiesta):
+        upcomingBtn.classList.add('bg-blue-800', 'text-white'); // Padara "Gaidāmo" pogu zilu ar baltu tekstu
+        upcomingBtn.classList.remove('bg-gray-200', 'text-gray-700'); // Noņem pogai neaktīvo (pelēko) stilu
+        
+        completedBtn.classList.add('bg-gray-200', 'text-gray-700'); // Padara "Pabeigto" pogu pelēku
+        completedBtn.classList.remove('bg-blue-800', 'text-white'); // Noņem pabeigto pogai zilo (aktīvo) krāsu
+
+    } else { // Ja parametrs "tab" nav "upcoming" (tātad lietotājs izvēlējies pabeigtās spēles):
+        
+        upcoming.classList.add('hidden'); // Paslēpj gaidāmās spēles
+        completed.classList.remove('hidden'); // Padara pabeigtās spēles redzamas
+        
+        // POGU STILA MAIŅA (Pretēji iepriekšējam):
+        completedBtn.classList.add('bg-blue-800', 'text-white'); // Pabeigto pogu iekrāso zilu (aktīvu)
+        completedBtn.classList.remove('bg-gray-200', 'text-gray-700'); // Noņem tai pelēko stilu
+        
+        upcomingBtn.classList.add('bg-gray-200', 'text-gray-700'); // Gaidāmo pogu padara pelēku (neaktīvu)
+        upcomingBtn.classList.remove('bg-blue-800', 'text-white'); // Noņem tai zilo krāsu
     }
-}
-</script>
+} // Funkcijas noslēgums
+</script>  {#JavaScript sadaļas noslēgums#}
 {% endblock %}
