@@ -34,10 +34,11 @@
                     <select id="position" name="position" required
                         class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
                         <option value="">Izvēlies...</option>
-                        <option value="Citurpuses" {% if player.position == 'Citurpuses' %}selected{% endif %}>Citurpuses</option>
-                        <option value="Otrās Kājas" {% if player.position == 'Otrās Kājas' %}selected{% endif %}>Otrās Kājas</option>
-                        <option value="Centrs" {% if player.position == 'Centrs' %}selected{% endif %}>Centrs</option>
-                        <option value="Piecgajiens" {% if player.position == 'Piecgajiens' %}selected{% endif %}>Piecgajiens</option>
+                        <option value="Outside_hitter" {% if player.position == 'Outside_hitter' %}selected{% endif %}>Kreisās puses uzbrucējs</option>
+                        <option value="Opposite_hitter" {% if player.position == 'Opposite_hitter' %}selected{% endif %}>Labās puses uzbrucējs</option>
+                        <option value="First_tempo" {% if player.position == 'First_tempo' %}selected{% endif %}>Centra uzbrucējs</option>
+                        <option value="Setter" {% if player.position == 'Setter' %}selected{% endif %}>Cēlājs</option>
+                        <option value="Libero" {% if player.position == 'Libero' %}selected{% endif %}>Libero</option>
                     </select>
                 </div>
 
