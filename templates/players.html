@@ -63,6 +63,7 @@
                 <p class="text-blue-600 text-sm">{{ player.team_name }}</p>
                 
                 {# Ja datubāzē ir norādīts tālrunis, parāda to #}
+                <p class="text-font medium font-black text-blue-900">Kopējie punkti: {{ player.points }}</p>
                 {% if player.phone %}
                 <p class="text-gray-500 text-xs mt-2">{{ player.phone }}</p>
                 {% endif %}

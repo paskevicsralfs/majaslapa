@@ -1,0 +1,144 @@
+/* Bāzes stils un mainīgie */
+:root {
+    --primary-color: #1e40af;   /* Galvenā zilā krāsa */
+    --secondary-color: #f97316; /* Oranžā akcenta krāsa */
+    --success-color: #22c55e;   /* Zaļā krāsa (veiksmīgām darbībām) */
+    --danger-color: #ef4444;    /* Sarkanā krāsa (kļūdām/dzēšanai) */
+    --gray-100: #f3f4f6;        /* Ļoti gaiši pelēks fons */
+    --gray-200: #e5e7eb;        /* Gaiši pelēks (rāmjiem) */
+    --gray-300: #d1d5db;        /* Vidēji pelēks */
+    --gray-600: #4b5563;        /* Tumši pelēks tekstam */
+    --gray-800: #1f2937;        /* Gandrīz melns kājenei/tekstam */
+}
+
+/* Navigācija */
+.nav-link {
+    transition: all 0.2s ease; /* Gluda pāreja visām stila izmaiņām (0.2 sekundes) */
+}
+
+.nav-link:hover {
+    transform: translateY(-1px); /* Uzbraucot ar peli, saite nedaudz paceļas uz augšu */
+}
+
+/* Tab poga (sadaļu pārslēgšanai) */
+.tab-btn {
+    transition: all 0.3s ease; /* Gluda pāreja (0.3 sekundes) */
+}
+
+.tab-btn:hover {
+    opacity: 0.9; /* Uzbraucot ar peli, poga kļūst nedaudz caurspīdīgāka */
+}
+
+/* Tabulas rindas hover efekts */
+tbody tr:hover {
+    background-color: #f9fafb; /* Iekrāso rindu gaiši pelēku, kad tai uzbrauc ar peli */
+}
+
+/* Kartiņas (Card) pacelšanas efekts */
+.hover\:shadow-xl:hover {
+    transform: translateY(-2px);    /* Kartiņa pacļas par 2 pikseļiem */
+    transition: all 0.3s ease;     /* Nodrošina, ka pacelšanās ir plūstoša */
+}
+
+/* Ievades lauki, izvēlnes un teksta laukumi fokusā */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;                            /* Noņem noklusējuma rāmi */
+    border-color: #3b82f6;                    /* Nomaina rāmja krāsu uz zilu */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); /* Pievieno maigu zilu mirdzumu apkārt */
+}
+
+/* Īpašais ritjoslas (scrollbar) stils Chrome/Safari pārlūkiem */
+::-webkit-scrollbar {
+    width: 8px;  /* Ritjoslas platums */
+    height: 8px; /* Ritjoslas augstums (horizontālajai) */
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;   /* Ritjoslas aizmugurējā fona krāsa */
+    border-radius: 4px;    /* Noapaļoti stūri sliedei */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;   /* Pašas "kamanas" jeb slīdņa krāsa */
+    border-radius: 4px;    /* Noapaļoti stūri slīdnim */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;   /* Slīdņa krāsa, kad tam uzbrauc ar peli */
+}
+
+/* Responsīvais dizains - pielāgošana maziem ekrāniem (līdz 640px) */
+@media (max-width: 640px) {
+    .text-4xl { font-size: 2rem; }    /* Samazina milzīgu tekstu uz 32px */
+    .text-3xl { font-size: 1.5rem; }  /* Samazina virsrakstus uz 24px */
+    .text-2xl { font-size: 1.25rem; } /* Samazina apakšvirsrakstus uz 20px */
+
+    .py-16 {
+        padding-top: 2rem;    /* Samazina vertikālās atkāpes no 64px uz 32px */
+        padding-bottom: 2rem;
+    }
+}
+
+/* Animācija lapas ielādei (parādīšanās no apakšas) */
+@keyframes fadeIn {
+    from {
+        opacity: 0;                /* Sākumā pilnīgi caurspīdīgs */
+        transform: translateY(10px); /* Sākumā 10px zemāk par īsto pozīciju */
+    }
+    to {
+        opacity: 1;                /* Beigās pilnīgi redzams */
+        transform: translateY(0);    /* Beigās savā īstajā vietā */
+    }
+}
+
+main {
+    animation: fadeIn 0.3s ease; /* Piesaka animāciju galvenajam saturam uz 0.3 sekundēm */
+}
+
+/* Rezultāta izcelšana (spēļu rezultātiem) */
+.score-highlight {
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Pievieno ļoti vieglu ēnu skaitļiem */
+}
+
+/* Pogu un saišu nospiešanas efekti */
+button,
+a[class*="bg-"] {
+    transition: all 0.2s ease; /* Sagatavo pogas gludām pārejām */
+}
+
+button:active,
+a[class*="bg-"]:active {
+    transform: scale(0.98); /* Nospiešanas brīdī poga vizuāli nedaudz saraujas (iegrimst) */
+}
+
+/* Ielādes stāvoklis (piemēram, pie datu sūtīšanas) */
+.loading {
+    opacity: 0.7;           /* Padara elementu blāvāku */
+    pointer-events: none;   /* Neļauj lietotājam nekur uzklikšķināt ielādes laikā */
+}
+
+/* Mobilā menu animācija */
+#mobile-menu {
+    max-height: 0;           /* Sākumā izvēlne ir pilnīgi aizvērta */
+    overflow: hidden;        /* Noslēpj saturu, kas iet pāri augstumam */
+    transition: max-height 0.3s ease; /* Gluda atvēršanās animācija */
+}
+
+#mobile-menu:not(.hidden) {
+    max-height: 500px;       /* Kad noņemta klase 'hidden', atveras līdz 500px augstumam */
+}
+
+/* Printēšanas stils (kā izskatīsies izdrukāta lapa) */
+@media print {
+    nav,
+    footer,
+    .mobile-menu {
+        display: none !important; /* Paslēpj navigāciju un kājeni */
+    }
+
+    body {
+        background: white; /* Printējot fons vienmēr būs balts */
+    }
+}

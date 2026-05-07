@@ -49,4 +49,73 @@
             </div>
 
             {# MOBILĀ IZVĒLNE (pēc noklusējuma paslēpta 'hidden') #}
-            <div id="mobile-menu" class="hidden md
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <a href="{{ url_for('index') }}" class="block px-4 py-2 rounded-lg hover:bg-blue-700">Sākumlapa</a>
+                <a href="{{ url_for('teams') }}" class="block px-4 py-2 rounded-lg hover:bg-blue-700">Komandas</a>
+                <a href="{{ url_for('players') }}" class="block px-4 py-2 rounded-lg hover:bg-blue-700">Spēlētāji</a>
+                <a href="{{ url_for('schedule') }}" class="block px-4 py-2 rounded-lg hover:bg-blue-700">Spēļu Grafiks</a>
+                <a href="{{ url_for('admin_players') }}" class="block px-4 py-2 rounded-lg hover:bg-blue-700">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+
+    {# GALVENAIS SATURS #}
+    <main class="flex-grow"> {# flex-grow aizpilda brīvo vietu, lai kājene būtu apakšā #}
+        {# Vieta, kur tiks ievietots saturs no citām lapām (index, players utt.) #}
+        {% block content %}{% endblock %}
+    </main>
+
+    {# KĀJENE (FOOTER) #}
+    <footer class="bg-gray-800 text-white py-8 mt-12"> {# Tumši pelēks fons, balts teksts #}
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8"> {# Režģis: 1 kolonna mobilajā, 3 datorā #}
+                
+                {# Par līgu #}
+                <div>
+                    <h3 class="font-bold text-lg mb-4">Par Līgu</h3>
+                    <p class="text-gray-300 text-sm">
+                        Entuziastu Volejbola otrās vīriešu līgas čempionāts - iknedēļas sacensības volejbolā starp Latvijas atraktīvākajiem entuziastiem.
+                    </p>
+                </div>
+                
+                {# Saites #}
+                <div>
+                    <h3 class="font-bold text-lg mb-4">Ātrās Saites</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="{{ url_for('index') }}" class="text-gray-300 hover:text-white">Sākumlapa</a></li>
+                        <li><a href="{{ url_for('teams') }}" class="text-gray-300 hover:text-white">Komandas</a></li>
+                        <li><a href="{{ url_for('schedule') }}" class="text-gray-300 hover:text-white">Spēļu Grafiks</a></li>
+                    </ul>
+                </div>
+                
+                {# Kontakti #}
+                <div>
+                    <h3 class="font-bold text-lg mb-4">Kontakti</h3>
+                    <p class="text-gray-300 text-sm">
+                        E-pasts: info@evl-liga.lv<br>
+                        Tālrunis: +371 20000000
+                    </p>
+                </div>
+            </div>
+            
+            {# Autortiesības un veidotājs #}
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400 text-sm">
+                <p>&copy; 2026 Entuziastu Volejbola Otrā Vīriešu Līga. <br>
+                Veidoja: Ralfs Paškevics 12.i2</p>
+            </div>
+        </div>
+    </footer>
+
+    {# JAVASCRIPT LOĢIKA MOBILAJAM MENU #}
+    <script>
+        // Atrod pogu un izvēlnes elementu
+        document.getElementById('mobile-menu-btn').addEventListener('click', function () {
+            const menu = document.getElementById('mobile-menu');
+            // 'toggle' pievieno 'hidden' klasi, ja tās nav, un noņem, ja tā ir (atver/aizver)
+            menu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+
+</html>
