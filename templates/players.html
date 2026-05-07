@@ -1,26 +1,39 @@
+{# Norāda, ka šī lapa izmanto base.html kā galveno skeletu #}
 {% extends "base.html" %}
 
+{# Ievieto lapas nosaukumu pārlūkprogrammas cilnē #}
 {% block title %}Spēlētāji - EVL 2. Vīriešu Līga{% endblock %}
 
+{# Sāk aizpildīt galveno satura bloku #}
 {% block content %}
 <div class="container mx-auto px-4 py-8">
+    {# Lapas galvenais virsraksts #}
     <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Spēlētāji</h1>
 
-     {#speletaju filtrs #}
+    {# SADAĻA: FILTRS - Baltā kastīte ar ēnu #}
     <div class="bg-white rounded-lg shadow-md p-4 mb-8">
+        {# GET metode sūta filtra datus caur URL (piemēram, ?team=5) #}
         <form method="get" class="flex flex-wrap gap-4 items-center">
             <label class="font-medium text-gray-700">Filtrēt pēc komandas:</label>
+            
+            {# Nolaižamais saraksts ar komandām #}
             <select name="team" class="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                 <option value="">Visas komandas</option>
+                {# Cikls, kas izveido izvēles iespējas katrai komandai no datubāzes #}
                 {% for team in teams %}
+                {# Pārbauda, vai šī komanda pašlaik ir atlasīta, lai saglabātu izvēli pēc lapas pārlādes #}
                 <option value="{{ team.id }}" {% if selected_team == team.id|string %}selected{% endif %}>
                     {{ team.name }}
                 </option>
                 {% endfor %}
             </select>
+            
+            {# Poga filtra apstiprināšanai #}
             <button type="submit" class="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900 transition">
                 Filtrēt
             </button>
+            
+            {# Ja filtrs ir aktīvs, parāda saiti, lai to noņemtu #}
             {% if selected_team %}
             <a href="{{ url_for('players') }}" class="text-gray-500 hover:text-gray-700">
                 Notīrīt filtru
@@ -29,24 +42,33 @@
         </form>
     </div>
 
-     {#speletaju apskats#} 
+    {# SADAĻA: SPĒLĒTĀJU REŽĢIS - adaptīvs kolonnu skaits (no 1 uz mobila līdz 4 uz datora) #}
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {# Uzsāk ciklu cauri spēlētāju sarakstam #}
         {% for player in players %}
         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300">
             <div class="p-6 text-center">
+                {# Profila ikonas aplis #}
                 <div class="bg-blue-100 rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+                    {# Lietotāja SVG ikona #}
                     <svg class="w-10 h-10 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                     </svg>
                 </div>
+                {# Spēlētāja vārds un uzvārds #}
                 <h3 class="text-lg font-bold text-gray-800">{{ player.first_name }} {{ player.last_name }}</h3>
+                {# Spēlētāja pozīcija laukumā #}
                 <p class="text-orange-500 font-medium text-sm mb-2">{{ player.position }}</p>
+                {# Komandas nosaukums (iegūts caur JOIN SQL vaicājumā) #}
                 <p class="text-blue-600 text-sm">{{ player.team_name }}</p>
+                
+                {# Ja datubāzē ir norādīts tālrunis, parāda to #}
                 {% if player.phone %}
                 <p class="text-gray-500 text-xs mt-2">{{ player.phone }}</p>
                 {% endif %}
             </div>
         </div>
+        {# Speciāls Jinja2 bloks: ja 'players' saraksts ir tukšs (filtrs neko neatrod) #}
         {% else %}
         <div class="col-span-full text-center py-12 text-gray-500">
             Spēlētāji netika atrasti
@@ -54,7 +76,7 @@
         {% endfor %}
     </div>
 
-     {#Admina Links#}
+    {# ADMINA SAITE - Lietotājiem ērta piekļuve pārvaldības paneim #}
     <div class="mt-8 text-center">
         <a href="{{ url_for('admin_players') }}" class="text-blue-600 hover:text-blue-800 font-medium">
             Pārvaldīt spēlētājus (Admin) →

@@ -1,121 +1,52 @@
 <!DOCTYPE html>
-<html lang="lv">
+<html lang="lv"> {# Norāda, ka lapas saturs ir latviešu valodā #}
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"> {# Iestata rakstzīmju kodējumu (atbalsta garumzīmes un mīkstinājuma zīmes) #}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> {# Nodrošina lapas mērogošanu uz mobilajām ierīcēm #}
+    
+    {# Jinja2 bloks, kas ļauj apakšlapām dinamiski mainīt lapas virsrakstu #}
     <title>{% block title %}Entuziastu Volejbola Otrā Vīriešu Līga{% endblock %}</title>
+    
+    {# Pieslēdz Tailwind CSS ietvaru no ārēja resursa (CDN) stila veidošanai #}
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
+    {# Pieslēdz lokālo CSS failu no Flask 'static' mapes papildu stiliem #}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
-<body class="bg-gray-100 min-h-screen flex flex-col">
-    {#navigacija#}
-    <nav class="bg-blue-800 text-white shadow-lg sticky top-0 z-50">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between py-4">
-                {#Logo#}
-                <a href="{{ url_for('index') }}" class="flex items-center space-x-3">
-                    <img src="{{ url_for('static', filename='images/evl_logo.svg') }}" alt="Website_logo"
-                        class="w-12 h-12">
+<body class="bg-gray-100 min-h-screen flex flex-col"> {# Pelēks fons, pilns ekrāna augstums un vertikāls izkārtojums #}
+
+    {# NAVIGĀCIJAS SADAĻA #}
+    <nav class="bg-blue-800 text-white shadow-lg sticky top-0 z-50"> {# Zila josla, ēna, pielīmēta augšpusē #}
+        <div class="container mx-auto px-4"> {# Centrēts saturs ar sānu atkāpēm #}
+            <div class="flex items-center justify-between py-4"> {# Elastīgs izkārtojums elementu atdalīšanai #}
+                
+                {# LOGO UN NOSAUKUMS #}
+                <a href="{{ url_for('index') }}" class="flex items-center space-x-3"> {# Saite uz sākumlapu ar atstarpi starp elementiem #}
+                    <img src="{{ url_for('static', filename='images/evl_logo.svg') }}" alt="Website_logo" class="w-12 h-12"> {# Logo attēls #}
                     <div>
-                        <span class="font-bold text-xl">EVL</span>
-                        <span class="block text-sm text-blue-200">2. Vīriešu Līga</span>
+                        <span class="font-bold text-xl">EVL</span> {# Galvenais saīsinājums #}
+                        <span class="block text-sm text-blue-200">2. Vīriešu Līga</span> {# Apakšvirsraksts mazākā izmērā #}
                     </div>
                 </a>
 
-                {#Desktop Menu #}
+                {# DATORA IZVĒLNE (redzama tikai no 'md' izmēra ekrāniem) #}
                 <div class="hidden md:flex items-center space-x-1">
-                    <a href="{{ url_for('index') }}" class="nav-link px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-                        Sākumlapa
-                    </a>
-                    <a href="{{ url_for('teams') }}" class="nav-link px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-                        Komandas
-                    </a>
-                    <a href="{{ url_for('players') }}"
-                        class="nav-link px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-                        Spēlētāji
-                    </a>
-                    <a href="{{ url_for('schedule') }}"
-                        class="nav-link px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-                        Spēļu Grafiks
-                    </a>
-                    </a>
-                    <a href="{{ url_for('admin_players') }}"
-                        class="nav-link px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-                        Admin
-                    </a>
+                    <a href="{{ url_for('index') }}" class="nav-link px-4 py-2 rounded-lg hover:bg-blue-700 transition">Sākumlapa</a>
+                    <a href="{{ url_for('teams') }}" class="nav-link px-4 py-2 rounded-lg hover:bg-blue-700 transition">Komandas</a>
+                    <a href="{{ url_for('players') }}" class="nav-link px-4 py-2 rounded-lg hover:bg-blue-700 transition">Spēlētāji</a>
+                    <a href="{{ url_for('schedule') }}" class="nav-link px-4 py-2 rounded-lg hover:bg-blue-700 transition">Spēļu Grafiks</a>
+                    <a href="{{ url_for('admin_players') }}" class="nav-link px-4 py-2 rounded-lg hover:bg-blue-700 transition">Admin</a>
                 </div>
 
-                {#telefona Menu poga#}
+                {# MOBILĀ MENU POGA (redzama tikai uz maziem ekrāniem) #}
                 <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-blue-700">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"> {# Ikonas zīmējums #}
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
             </div>
 
-            {#telefona Menu#}
-            <div id="mobile-menu" class="hidden md:hidden pb-4">
-                <a href="{{ url_for('index') }}" class="block px-4 py-2 rounded-lg hover:bg-blue-700">Sākumlapa</a>
-                <a href="{{ url_for('teams') }}" class="block px-4 py-2 rounded-lg hover:bg-blue-700">Komandas</a>
-                <a href="{{ url_for('players') }}" class="block px-4 py-2 rounded-lg hover:bg-blue-700">Spēlētāji</a>
-                <a href="{{ url_for('schedule') }}" class="block px-4 py-2 rounded-lg hover:bg-blue-700">Spēļu
-                    Grafiks</a>
-                <a href="{{ url_for('admin_players') }}" class="block px-4 py-2 rounded-lg hover:bg-blue-700">Admin</a>
-            </div>
-        </div>
-    </nav>
-
-
-    {# galvenais Saturs #}
-    <main class="flex-grow">
-        {% block content %}{% endblock %}
-    </main>
-
-    {# kajene#}
-    <footer class="bg-gray-800 text-white py-8 mt-12">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div>
-                    <h3 class="font-bold text-lg mb-4">Par Līgu</h3>
-                    <p class="text-gray-300 text-sm">
-                        Entuziastu Volejbola otrās vīriešu līgas čempionāts - iknedēļas sacensības
-                        volejbolā starp Latvijas atraktīvākajiem entuziastiem.
-                    </p>
-                </div>
-                <div>
-                    <h3 class="font-bold text-lg mb-4">Ātrās Saites</h3>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="{{ url_for('index') }}" class="text-gray-300 hover:text-white">Sākumlapa</a></li>
-                        <li><a href="{{ url_for('teams') }}" class="text-gray-300 hover:text-white">Komandas</a></li>
-                        <li><a href="{{ url_for('schedule') }}" class="text-gray-300 hover:text-white">Spēļu Grafiks</a>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="font-bold text-lg mb-4">Kontakti</h3>
-                    <p class="text-gray-300 text-sm">
-                        E-pasts: info@evl-liga.lv<br>
-                        Tālrunis: +371 20000000
-                    </p>
-                </div>
-            </div>
-            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400 text-sm">
-                <p>&copy; 2026 Entuziastu Volejbola Otrā Vīriešu Līga. <br>
-                Veidoja: Ralfs Paškevics 12.i2</p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Mobila menu izvele
-        document.getElementById('mobile-menu-btn').addEventListener('click', function () {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        });
-    </script>
-</body>
-
-</html>
+            {# MOBILĀ IZVĒLNE (pēc noklusējuma paslēpta 'hidden') #}
+            <div id="mobile-menu" class="hidden md

@@ -1,42 +1,51 @@
+{# Norāda, ka šī lapa izmanto base.html kā karkasu (galveni, kājeni u.c.) #}
 {% extends "base.html" %}
 
+{# Iestata lapas nosaukumu pārlūkprogrammas cilnē #}
 {% block title %}Spēļu Grafiks - EVL 2. Vīriešu Līga{% endblock %}
 
+{# Sāk satura bloku #}
 {% block content %}
 <div class="container mx-auto px-4 py-8">
+    {# Lapas galvenais virsraksts #}
     <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Spēļu Grafiks</h1>
 
-     {#sakums#}
+    {# Cilņu (Tabs) navigācija, lai pārslēgtos starp nākotnes un aizvadītajām spēlēm #}
     <div class="flex justify-center mb-8">
         <div class="inline-flex rounded-lg shadow-md overflow-hidden">
+            {# Poga nākotnes spēlēm - izsauc JavaScript funkciju showTab('upcoming') #}
             <button onclick="showTab('upcoming')" id="tab-upcoming" class="tab-btn px-6 py-3 bg-blue-800 text-white font-medium">
                 Nākotnes Spēles
             </button>
+            {# Poga aizvadītajām spēlēm - izsauc JavaScript funkciju showTab('completed') #}
             <button onclick="showTab('completed')" id="tab-completed" class="tab-btn px-6 py-3 bg-gray-200 text-gray-700 font-medium">
                 Aizvadītās Spēles
             </button>
         </div>
     </div>
 
-     {#nakotnes speles #}
+    {# SADAĻA: NĀKOTNES SPĒLES #}
     <div id="upcoming-games" class="game-section">
         <h2 class="text-xl font-bold text-gray-800 mb-6">Nākotnes Spēles</h2>
         <div class="space-y-4">
+            {# Uzsāk ciklu cauri visām plānotajām spēlēm #}
             {% for game in scheduled_games %}
             <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
+                {# Spēles laiks, datums un vieta #}
                 <div class="flex flex-col md:flex-row justify-between items-center mb-4">
                     <div class="flex items-center space-x-4 mb-4 md:mb-0">
                         <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
-                             {{ game.date }}
+                             {{ game.date }} {# Izvada datumu #}
                         </span>
                         <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">
-                             {{ game.time }}
+                             {{ game.time }} {# Izvada laiku #}
                         </span>
                     </div>
                     <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium">
-                         {{ game.location }}
+                         {{ game.location }} {# Izvada halles/vietas nosaukumu #}
                     </span>
                 </div>
+                {# Komandu nosaukumi un "VS" simbols #}
                 <div class="flex justify-between items-center text-center">
                     <div class="flex-1">
                         <h3 class="text-xl font-bold text-blue-800">{{ game.home_team }}</h3>
@@ -49,6 +58,7 @@
                     </div>
                 </div>
             </div>
+            {# Ja saraksts 'scheduled_games' ir tukšs, izpildās šis bloks #}
             {% else %}
             <div class="bg-white rounded-lg shadow-md p-12 text-center text-gray-500">
                 Nav ieplānotu spēļu
@@ -57,10 +67,11 @@
         </div>
     </div>
 
-    {#notikusas speles #}
+    {# SADAĻA: AIZVADĪTĀS SPĒLES (Pēc noklusējuma paslēpta ar klasi 'hidden') #}
     <div id="completed-games" class="game-section hidden">
         <h2 class="text-xl font-bold text-gray-800 mb-6">Aizvadītās Spēles</h2>
         <div class="space-y-4">
+            {# Cikls cauri pabeigtajām spēlēm #}
             {% for game in completed_games %}
             <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
                 <div class="flex flex-col md:flex-row justify-between items-center mb-4">
@@ -76,26 +87,32 @@
                          {{ game.location }}
                     </span>
                 </div>
+                {# Rezultātu izvade un uzvarētāju iekrāsošana #}
                 <div class="flex justify-between items-center text-center">
                     <div class="flex-1">
+                        {# Ja mājinieku punkti lielāki par viesu, iekrāso zaļu (uzvara) #}
                         <h3 class="text-xl font-bold {% if game.home_score > game.away_score %}text-green-600{% else %}text-gray-700{% endif %}">
                             {{ game.home_team }}
                         </h3>
                         <div class="text-4xl font-bold text-blue-800 mt-2">{{ game.home_score }}</div>
                     </div>
                     <div class="px-4">
+                        {# Tukšs bloks atstarpei starp punktiem #}
                     </div>
                     <div class="flex-1">
+                        {# Ja viesu punkti lielāki, iekrāso zaļu #}
                         <h3 class="text-xl font-bold {% if game.away_score > game.home_score %}text-green-600{% else %}text-gray-700{% endif %}">
                             {{ game.away_team }}
                         </h3>
                         <div class="text-4xl font-bold text-blue-800 mt-2">{{ game.away_score }}</div>
                     </div>
                 </div>
+                {# Sīkāks setu rezultāts (piem. 3:1) #}
                 <div class="mt-4 text-center text-sm text-gray-500">
                     Seti: <span class="font-bold">{{ game.home_sets }}:{{ game.away_sets }}</span>
                 </div>
             </div>
+            {# Ja aizvadīto spēļu saraksts ir tukšs #}
             {% else %}
             <div class="bg-white rounded-lg shadow-md p-12 text-center text-gray-500">
                 Nav aizvadītu spēļu
@@ -104,7 +121,7 @@
         </div>
     </div>
 
-     {#atpakal links#} 
+    {# Atpakaļceļa saite uz sākumlapu #}
     <div class="mt-8 text-center">
         <a href="{{ url_for('index') }}" class="text-blue-600 hover:text-blue-800 font-medium">
             ← Atpakaļ uz sākumlapu
@@ -112,40 +129,40 @@
     </div>
 </div>
 
-<script> // Atver JavaScript koda sadaļu HTML failā
-function showTab(tab) { // Definē funkciju "showTab", kas kā ieejas parametru "tab" saņem tekstu (piemēram, 'upcoming')
-    
-    // ATRAŠANA: Nākamās 4 rindiņas atrod elementus lapā pēc to ID un piešķir tos mainīgajiem
-    const upcoming = document.getElementById('upcoming-games'); // Atrod bloku ar gaidāmajām spēlēm
-    const completed = document.getElementById('completed-games'); // Atrod bloku ar pabeigtajām spēlēm
-    const upcomingBtn = document.getElementById('tab-upcoming'); // Atrod pašu pogu "Gaidāmās spēles"
-    const completedBtn = document.getElementById('tab-completed'); // Atrod pašu pogu "Pabeigtās spēles"
+<script>
+// Funkcija, kas kontrolē, kura sadaļa (tab) ir redzama
+function showTab(tab) {
+    // Definē mainīgos un piesaista tos HTML elementiem pēc to ID
+    const upcoming = document.getElementById('upcoming-games');
+    const completed = document.getElementById('completed-games');
+    const upcomingBtn = document.getElementById('tab-upcoming');
+    const completedBtn = document.getElementById('tab-completed');
 
-    // PĀRBAUDE: Pārbauda, kura sadaļa ir jāaktivizē
-    if (tab === 'upcoming') { // Ja lietotājs izvēlējies "Gaidāmās spēles":
+    // Ja nospiesta poga "upcoming" (Nākotnes spēles)
+    if (tab === 'upcoming') {
+        upcoming.classList.remove('hidden'); // Parāda nākotnes spēles
+        completed.classList.add('hidden');    // Paslēpj aizvadītās spēles
         
-        upcoming.classList.remove('hidden'); // Noņem klasi "hidden" (paslēpts), padarot gaidāmās spēles redzamas
-        completed.classList.add('hidden'); // Pievieno klasi "hidden", paslēpjot pabeigtās spēles
+        // Atjaunina pogu vizuālo izskatu (Nākotnes poga kļūst aktīva/zila)
+        upcomingBtn.classList.add('bg-blue-800', 'text-white');
+        upcomingBtn.classList.remove('bg-gray-200', 'text-gray-700');
         
-        // POGU STILA MAIŅA (Lai vizuāli redzētu, kura poga ir nospiesta):
-        upcomingBtn.classList.add('bg-blue-800', 'text-white'); // Padara "Gaidāmo" pogu zilu ar baltu tekstu
-        upcomingBtn.classList.remove('bg-gray-200', 'text-gray-700'); // Noņem pogai neaktīvo (pelēko) stilu
-        
-        completedBtn.classList.add('bg-gray-200', 'text-gray-700'); // Padara "Pabeigto" pogu pelēku
-        completedBtn.classList.remove('bg-blue-800', 'text-white'); // Noņem pabeigto pogai zilo (aktīvo) krāsu
+        // Aizvadīto spēļu poga kļūst neaktīva/pelēka
+        completedBtn.classList.add('bg-gray-200', 'text-gray-700');
+        completedBtn.classList.remove('bg-blue-800', 'text-white');
 
-    } else { // Ja parametrs "tab" nav "upcoming" (tātad lietotājs izvēlējies pabeigtās spēles):
+    } else { // Ja izvēlēta sadaļa "completed" (Aizvadītās spēles)
+        upcoming.classList.add('hidden');      // Paslēpj nākotnes spēles
+        completed.classList.remove('hidden'); // Parāda aizvadītās spēles
         
-        upcoming.classList.add('hidden'); // Paslēpj gaidāmās spēles
-        completed.classList.remove('hidden'); // Padara pabeigtās spēles redzamas
+        // Atjaunina pogu vizuālo izskatu (Aizvadīto poga kļūst aktīva/zila)
+        completedBtn.classList.add('bg-blue-800', 'text-white');
+        completedBtn.classList.remove('bg-gray-200', 'text-gray-700');
         
-        // POGU STILA MAIŅA (Pretēji iepriekšējam):
-        completedBtn.classList.add('bg-blue-800', 'text-white'); // Pabeigto pogu iekrāso zilu (aktīvu)
-        completedBtn.classList.remove('bg-gray-200', 'text-gray-700'); // Noņem tai pelēko stilu
-        
-        upcomingBtn.classList.add('bg-gray-200', 'text-gray-700'); // Gaidāmo pogu padara pelēku (neaktīvu)
-        upcomingBtn.classList.remove('bg-blue-800', 'text-white'); // Noņem tai zilo krāsu
+        // Nākotnes spēļu poga kļūst neaktīva/pelēka
+        upcomingBtn.classList.add('bg-gray-200', 'text-gray-700');
+        upcomingBtn.classList.remove('bg-blue-800', 'text-white');
     }
-} // Funkcijas noslēgums
-</script>  {#JavaScript sadaļas noslēgums#}
+}
+</script>
 {% endblock %}

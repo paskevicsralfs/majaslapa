@@ -1,10 +1,13 @@
+{# Mantot kopējo dizainu no base.html #}
 {% extends "base.html" %}
 
+{# Iestatīt lapas virsrakstu #}
 {% block title %}Rediģēt Spēlētāju - EVL 2. Vīriešu Līga{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-2xl mx-auto">
+        {# Galvene ar navigācijas saiti atpakaļ uz admin paneli #}
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-3xl font-bold text-gray-800">Rediģēt Spēlētāju</h1>
             <a href="{{ url_for('admin_players') }}" class="text-blue-600 hover:text-blue-800">
@@ -12,11 +15,14 @@
             </a>
         </div>
 
+        {# Rediģēšanas formas bloks #}
         <div class="bg-white rounded-lg shadow-md p-8">
             <form method="POST" class="space-y-6">
+                {# Vārda un Uzvārda lauki (divās kolonnās uz lielākiem ekrāniem) #}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-gray-700 font-medium mb-2" for="first_name">Vārds *</label>
+                        {# Atribūts 'value' ielādē esošo informāciju no 'player' objekta #}
                         <input type="text" id="first_name" name="first_name" required
                             value="{{ player.first_name }}"
                             class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
@@ -29,11 +35,13 @@
                     </div>
                 </div>
 
+                {# Pozīcijas izvēle ar loģiku, kas automātiski atlasa esošo pozīciju #}
                 <div>
                     <label class="block text-gray-700 font-medium mb-2" for="position">Pozīcija *</label>
                     <select id="position" name="position" required
                         class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
                         <option value="">Izvēlies...</option>
+                        {# Pārbauda, vai 'player.position' sakrīt ar opciju, un pievieno 'selected' #}
                         <option value="Outside_hitter" {% if player.position == 'Outside_hitter' %}selected{% endif %}>Kreisās puses uzbrucējs</option>
                         <option value="Opposite_hitter" {% if player.position == 'Opposite_hitter' %}selected{% endif %}>Labās puses uzbrucējs</option>
                         <option value="First_tempo" {% if player.position == 'First_tempo' %}selected{% endif %}>Centra uzbrucējs</option>
@@ -42,12 +50,14 @@
                     </select>
                 </div>
 
+                {# Komandas izvēle no visu pieejamo komandu saraksta #}
                 <div>
                     <label class="block text-gray-700 font-medium mb-2" for="team_id">Komanda *</label>
                     <select id="team_id" name="team_id" required
                         class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
                         <option value="">Izvēlies...</option>
                         {% for team in teams %}
+                        {# Pārbauda spēlētāja komandas ID pret saraksta komandas ID #}
                         <option value="{{ team.id }}" {% if player.team_id == team.id %}selected{% endif %}>
                             {{ team.name }}
                         </option>
@@ -55,17 +65,22 @@
                     </select>
                 </div>
 
+                {# Telefona numura lauks (izvēles iespēja) #}
                 <div>
                     <label class="block text-gray-700 font-medium mb-2" for="phone">Telefons</label>
+                    {# 'player.phone or ""' nodrošina, ka netiek rādīts "None", ja dati nav ievadīti #}
                     <input type="text" id="phone" name="phone"
                         value="{{ player.phone or '' }}"
                         class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
                 </div>
 
-                <div class="flex space-x-4">
+                {# Darbību pogas #}
+                <div class="flex space-x-4 pt-4">
+                    {# Apstiprināt izmaiņas #}
                     <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition">
                         Saglabāt Izmaiņas
                     </button>
+                    {# Atcelt un doties atpakaļ #}
                     <a href="{{ url_for('admin_players') }}"
                         class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 px-6 rounded-lg text-center transition">
                         Atcelt

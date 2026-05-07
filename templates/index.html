@@ -1,23 +1,27 @@
-{#Mantot galveno struktūru no base.html faila (navigācija, kājene u.c.)#}
+
 {% extends "base.html" %}
 
-{# Definēt lapas nosaukumu, kas parādīsies pārlūka cilnē#}
+{# Iestata unikālo lapas nosaukumu pārlūka cilnei #}
 {% block title %}Sākumlapa - EVL 2. Vīriešu Līga{% endblock %}
 
-{# Sākas galvenais satura bloks #}
+{# Sāk galveno satura aizpildīšanu #}
 {% block content %}
 
+{# Header (Lielais zilais laukums augšā) #}
 <section class="bg-gradient-to-r from-blue-800 to-blue-900 text-white py-16">
-    <div class="container mx-auto px-4"> <div class="text-center"> <h1 class="text-4xl md:text-5xl font-bold mb-4">
+    <div class="container mx-auto px-4"> 
+        <div class="text-center"> 
+            {# Galvenais virsraksts ar responsīvu izmēru (text-4xl uz mobila, text-5xl uz datora) #}
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">
                 Entuziastu Volejbola<br>Otrā Vīriešu Līga
             </h1>
             <div class="flex justify-center gap-4 flex-wrap">
-                {# Saite uz spēļu grafiku, izmantojot Flask url_for funkciju#} 
+                {# Dinamiska saite uz spēļu grafika maršrutu #}
                 <a href="{{ url_for('schedule') }}"
                     class="bg-orange-500 hover:bg-orange-600 px-6 py-3 rounded-lg font-semibold transition">
                     Spēļu Grafiks
                 </a>
-                {# Saite uz komandu sarakstu#}
+                {# Dinamiska saite uz komandu sadaļu #}
                 <a href="{{ url_for('teams') }}"
                     class="bg-white text-blue-800 hover:bg-gray-100 px-6 py-3 rounded-lg font-semibold transition">
                     Komandu Tabula
@@ -27,42 +31,52 @@
     </div>
 </section>
 
+{# KOPVĒRTĒJUMA TABULA #}
 <div class="container mx-auto px-4 py-8">
     <section class="mb-12">
         <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-            <svg class="w-6 h-6 mr-2 text-orange-500" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-            </svg>
             Kopvērtējuma Tabula
         </h2>
         
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <div class="overflow-x-auto"> <table class="w-full">
-                    <thead class="bg-gray-800 text-white"> <tr>
+            <div class="overflow-x-auto"> 
+                <table class="w-full">
+                    {# Tabulas galvene ar saīsinājumiem #}
+                    <thead class="bg-gray-800 text-white"> 
+                        <tr>
                             <th class="px-4 py-3 text-left">#</th>
                             <th class="px-4 py-3 text-left">Komanda</th>
-                            <th class="px-4 py-3 text-center">SP</th>
-                            <th class="px-4 py-3 text-center">U</th>
-                            <th class="px-4 py-3 text-center">Z</th>
-                            <th class="px-4 py-3 text-center">P</th>
-                            <th class="px-4 py-3 text-center hidden sm:table-cell">GS</th>
-                            <th class="px-4 py-3 text-center hidden sm:table-cell">ZA</th>
-                            <th class="px-4 py-3 text-center hidden md:table-cell">Att.</th>
+                            <th class="px-4 py-3 text-center">SP</th> {# Spēles #}
+                            <th class="px-4 py-3 text-center">U</th>  {# Uzvaras #}
+                            <th class="px-4 py-3 text-center">Z</th>  {# Zaudējumi #}
+                            <th class="px-4 py-3 text-center">P</th>  {# Punkti #}
+                            {# hidden sm:table-cell paslēpj šīs kolonnas uz maziem ekrāniem #}
+                            <th class="px-4 py-3 text-center hidden sm:table-cell">GS</th> {# Iegūtie seti #}
+                            <th class="px-4 py-3 text-center hidden sm:table-cell">ZA</th> {# Zaudētie seti #}
+                            <th class="px-4 py-3 text-center hidden md:table-cell">Att.</th> {# Attiecība % #}
                         </tr>
                     </thead>
                     <tbody>
-                         {#Cikls, kas iet cauri katrai komandai sarakstā 'standings'#}
+                        {# Cikls, kas iet cauri sakārtotam komandu sarakstam #}
                         {% for team in standings %}
                         <tr class="border-b hover:bg-gray-50 transition">
+                            {# loop.index izvada rīndas numuru (1, 2, 3...). Ja pirmais trijnieks, iekrāso oranžu #}
                             <td class="px-4 py-3 font-bold {% if loop.index <= 3 %}text-orange-500{% endif %}">
                                 {{ loop.index }}.
                             </td>
-                            <td class="px-4 py-3 font-medium">{{ team.name }}</td> <td class="px-4 py-3 text-center">{{ team.played }}</td> <td class="px-4 py-3 text-center text-green-600 font-semibold">{{ team.won }}</td> <td class="px-4 py-3 text-center text-red-600">{{ team.lost }}</td> <td class="px-4 py-3 text-center font-bold text-blue-800">{{ team.points }}</td> <td class="px-4 py-3 text-center hidden sm:table-cell">{{ team.sets_won }}</td> <td class="px-4 py-3 text-center hidden sm:table-cell">{{ team.sets_lost }}</td> <td class="px-4 py-3 text-center hidden md:table-cell">
-                                {#Ja komandai ir bijušas spēles, rāda win percentage, citādi 0.00% #}
+                            <td class="px-4 py-3 font-medium">{{ team.name }}</td> 
+                            <td class="px-4 py-3 text-center">{{ team.played }}</td> 
+                            <td class="px-4 py-3 text-center text-green-600 font-semibold">{{ team.won }}</td> 
+                            <td class="px-4 py-3 text-center text-red-600">{{ team.lost }}</td> 
+                            <td class="px-4 py-3 text-center font-bold text-blue-800">{{ team.points }}</td> 
+                            <td class="px-4 py-3 text-center hidden sm:table-cell">{{ team.sets_won }}</td> 
+                            <td class="px-4 py-3 text-center hidden sm:table-cell">{{ team.sets_lost }}</td> 
+                            <td class="px-4 py-3 text-center hidden md:table-cell">
+                                {# Aprēķina un parāda procentuālo attiecību, izvairoties no dalīšanas ar nulli #}
                                 {% if team.win_percentage > 0 or (team.sets_won + team.sets_lost > 0) %}
-                                {{ "%.2f"|format(team.win_percentage) }}%
+                                    {{ "%.2f"|format(team.win_percentage) }}%
                                 {% else %}
-                                0.00%
+                                    0.00%
                                 {% endif %}
                             </td>
                         </tr>
@@ -70,14 +84,17 @@
                     </tbody>
                 </table>
             </div>
+            {# Skaidrojums lietotājam par tabulas saīsinājumiem #}
             <div class="px-4 py-2 bg-gray-100 text-xs text-gray-600">
                 S - Spēles, U - Uzvaras, Z - Zaudējumi, P - Punkti, Us - Uzvarētie seti, Zs - Zaudētie seti, Att. - Attiecība
             </div>
         </div>
     </section>
 
+    {# DIVU KOLONNU IZKĀRTOJUMS (Nesenās vs Tuvākās spēles) #}
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
+        {# NESENĀS SPĒLES (Rezultāti) #}
         <section>
             <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
                 <svg class="w-6 h-6 mr-2 text-green-500" fill="currentColor" viewBox="0 0 24 24">
@@ -85,7 +102,7 @@
                 </svg>
                 Nesenās Spēles
             </h2>
-            <div class="space-y-4"> {# Cikls cauri recent_games sarakstam #}
+            <div class="space-y-4"> 
                 {% for game in recent_games %}
                 <div class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition">
                     <div class="flex justify-between items-center mb-2">
@@ -94,17 +111,22 @@
                     </div>
                     <div class="flex justify-between items-center">
                         <div class="text-center flex-1">
-                            <div class="font-semibold text-lg">{{ game.home_team }}</div> <div class="text-2xl font-bold text-blue-800">{{ game.home_score }}</div> </div>
+                            <div class="font-semibold text-lg">{{ game.home_team }}</div> 
+                            <div class="text-2xl font-bold text-blue-800">{{ game.home_score }}</div> 
+                        </div>
                         <div class="text-gray-400 px-4">:</div>
                         <div class="text-center flex-1">
-                            <div class="font-semibold text-lg">{{ game.away_team }}</div> <div class="text-2xl font-bold text-blue-800">{{ game.away_score }}</div> </div>
+                            <div class="font-semibold text-lg">{{ game.away_team }}</div> 
+                            <div class="text-2xl font-bold text-blue-800">{{ game.away_score }}</div> 
+                        </div>
                     </div>
                     <div class="text-center text-sm text-gray-500 mt-2">
                         Seti: <span class="font-medium">{{ game.home_sets }}:{{ game.away_sets }}</span>
-                        | {{ game.location }} </div>
+                        | {{ game.location }} 
+                    </div>
                 </div>
-                {# Ja saraksts ir tukšs, rāda šo bloku #}
                 {% else %}
+                {# Ja datubāzē nav nevienas pabeigtas spēles #}
                 <div class="bg-white rounded-lg shadow-md p-8 text-center text-gray-500">
                     Nav spēļu dati
                 </div>
@@ -112,6 +134,7 @@
             </div>
         </section>
 
+        {# TUVĀKĀS SPĒLES (Grafiks) #}
         <section>
             <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
                 <svg class="w-6 h-6 mr-2 text-orange-500" fill="currentColor" viewBox="0 0 24 24">
@@ -120,7 +143,6 @@
                 Tuvākās Spēles
             </h2>
             <div class="space-y-4">
-                {# Cikls cauri upcoming_games sarakstam #}
                 {% for game in upcoming_games %}
                 <div class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition">
                     <div class="flex justify-between items-center mb-2">
@@ -141,11 +163,13 @@
                     </div>
                 </div>
                 {% else %}
+                {# Ja nav ieplānotu nākotnes spēļu #}
                 <div class="bg-white rounded-lg shadow-md p-8 text-center text-gray-500">
                     Nav ieplānotu spēļu
                 </div>
                 {% endfor %}
             </div>
+            {# Saite, kas ved uz pilno grafika lapu #}
             <a href="{{ url_for('schedule') }}"
                 class="block mt-4 text-center text-blue-600 hover:text-blue-800 font-medium">
                 Skatīt visas spēles →
@@ -153,4 +177,4 @@
         </section>
     </div>
 </div>
-{% endblock %} 
+{% endblock %}

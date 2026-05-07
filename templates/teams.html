@@ -1,33 +1,45 @@
+{# Norāda, ka šī lapa manto struktūru no base.html faila #}
 {% extends "base.html" %}
 
+{# Ievieto lapas nosaukumu pārlūkprogrammas cilnē (title tagā) #}
 {% block title %}Komandas - EVL 2. Vīriešu Līga{% endblock %}
 
+{# Sāk aizpildīt galveno satura bloku, kas definēts bāzes veidnē #}
 {% block content %}
 <div class="container mx-auto px-4 py-8">
+    {# Lapas lielais virsraksts ar Tailwind CSS formatējumu #}
     <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Komandas</h1>
 
+    {# Izveido režģi: 1 kolonna uz mobila, 2 uz planšetes, 3 uz datora ekrāna #}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {# Uzsāk ciklu cauri visām komandām, ko Flask iedeva mainīgajā 'teams_data' #}
         {% for item in teams_data %}
         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300">
-             {#Komandas Header#} 
+            
+            {# Kartiņas augšējā daļa ar gradienta fonu un komandas nosaukumu #}
             <div class="bg-gradient-to-r from-blue-700 to-blue-800 p-6 text-white">
                 <div class="flex items-center space-x-4">
+                    {# Balts aplis ikonas fonam #}
                     <div class="bg-white rounded-full p-3">
+                        {# Volejbola bumbas SVG ikona #}
                         <svg class="w-10 h-10 text-blue-800" viewBox="0 0 24 24" fill="currentColor">
                             <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
                             <path d="M12 2 C6 8, 6 16, 12 22 M12 2 C18 8, 18 16, 12 22 M2 12 C8 6, 16 6, 22 12 M2 12 C8 18, 16 18, 22 12" fill="none" stroke="currentColor" stroke-width="1.5"/>
                         </svg>
                     </div>
                     <div>
+                        {# Dinamiski izvada komandas nosaukumu #}
                         <h2 class="text-xl font-bold">{{ item.team.name }}</h2>
+                        {# Dinamiski izvada spēlētāju skaitu komandā #}
                         <p class="text-blue-200 text-sm">{{ item.player_count }} spēlētāji</p>
                     </div>
                 </div>
             </div>
 
-             {#Komandas stati#}
+            {# Kartiņas apakšējā daļa - statistikas bloks #}
             <div class="p-6">
                 <h3 class="text-sm font-semibold text-gray-500 uppercase mb-4">Statistika</h3>
+                {# Trīs kolonnu režģis galvenajiem rādītājiem #}
                 <div class="grid grid-cols-3 gap-4 text-center">
                     <div>
                         <div class="text-2xl font-bold text-blue-800">{{ item.team.points }}</div>
@@ -43,6 +55,7 @@
                     </div>
                 </div>
 
+                {# Papildus detaļas: spēles, seti un uzvaru procents #}
                 <div class="border-t mt-4 pt-4">
                     <div class="grid grid-cols-2 gap-3 text-sm">
                         <div class="flex justify-between">
@@ -60,9 +73,12 @@
                         <div class="flex justify-between">
                             <span class="text-gray-500">Attiecība:</span>
                             <span class="font-medium">
+                                {#  pārbauda, vai ir nospēlēts vismaz viens sets, lai nedalītu ar nulli #}
                                 {% if item.team.sets_won + item.team.sets_lost > 0 %}
+                                    {# Aprēķina uzvarēto setu procentu un noformē līdz 2 zīmēm aiz komata #}
                                     {{ "%.2f"|format(item.team.sets_won / (item.team.sets_won + item.team.sets_lost) * 100) }}%
                                 {% else %}
+                                    {# Ja nav spēļu, rāda domuzīmi #}
                                     -
                                 {% endif %}
                             </span>
@@ -71,14 +87,17 @@
                 </div>
             </div>
         </div>
+        {# Noslēdz komandu ciklu #}
         {% endfor %}
     </div>
 
-    {# Atpakal uz sakumu#} 
+    {# Navigācijas bloks atpakaļceļam uz sākumu #}
     <div class="mt-8 text-center">
+        {# url_for('index') dinamiski izveido saiti uz Flask galveno funkciju #}
         <a href="{{ url_for('index') }}" class="text-blue-600 hover:text-blue-800 font-medium">
             ← Atpakaļ uz sākumlapu
         </a>
     </div>
 </div>
+{# Noslēdz satura bloku #}
 {% endblock %}

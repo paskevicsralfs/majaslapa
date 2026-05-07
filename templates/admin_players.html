@@ -1,41 +1,42 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {# Mantot pamatstruktūru no base.html faila #}
 
-{% block title %}Admin - Spēlētāji - EVL 2. Vīriešu Līga{% endblock %}
+{% block title %}Admin - Spēlētāji - EVL 2. Vīriešu Līga{% endblock %} {# Iestatīt lapas unikālo virsrakstu #}
 
-{% block content %}
-<div class="container mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">Spēlētāju Pārvaldība</h1>
-        <a href="{{ url_for('index') }}" class="text-blue-600 hover:text-blue-800">
+{% block content %} {# Sākt satura bloku #}
+<div class="container mx-auto px-4 py-8"> {# Galvenais konteiners ar centrēšanu un atkāpēm #}
+    <div class="flex justify-between items-center mb-8"> {# Virsraksta josla ar elementu izkārtošanu malās #}
+        <h1 class="text-3xl font-bold text-gray-800">Spēlētāju Pārvaldība</h1> {# Galvenais virsraksts #}
+        <a href="{{ url_for('index') }}" class="text-blue-600 hover:text-blue-800"> {# Saite uz sākumlapu #}
             ← Atpakaļ
         </a>
     </div>
 
-    {#pievienot Speletaju #}
-    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
-            <svg class="w-6 h-6 mr-2 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+    {# PIEVIENOŠANAS SEKCIJA #}
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8"> {# Balts bloks ar noapaļotiem stūriem un ēnu #}
+        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center"> {# Formas virsraksts ar ikonu #}
+            <svg class="w-6 h-6 mr-2 text-green-500" fill="currentColor" viewBox="0 0 24 24"> {# "Plus" ikona #}
                 <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
             </svg>
             Pievienot Jaunu Spēlētāju
         </h2>
 
+        {# Formas sākums; dati tiek sūtīti uz 'add_player' funkciju #}
         <form method="POST" action="{{ url_for('add_player') }}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
-                <label class="block text-gray-700 font-medium mb-2" for="first_name">Vārds *</label>
+                <label class="block text-gray-700 font-medium mb-2" for="first_name">Vārds *</label> {# Etiķete vārdam #}
                 <input type="text" id="first_name" name="first_name" required
-                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"> {# Teksta ievade #}
             </div>
             <div>
-                <label class="block text-gray-700 font-medium mb-2" for="last_name">Uzvārds *</label>
+                <label class="block text-gray-700 font-medium mb-2" for="last_name">Uzvārds *</label> {# Etiķete uzvārdam #}
                 <input type="text" id="last_name" name="last_name" required
                     class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
             </div>
             <div>
-                <label class="block text-gray-700 font-medium mb-2" for="position">Pozīcija *</label>
+                <label class="block text-gray-700 font-medium mb-2" for="position">Pozīcija *</label> {# Izvēle volejbola pozīcijai #}
                 <select id="position" name="position" required
                     class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <option value="">Izvēlies...</option>
+                    <option value="">Izvēlies...</option> {# Noklusējuma tukšā opcija #}
                     <option value="Outside_hitter">Kreisās puses uzbrucējs</option>
                     <option value="Opposite_hitter">Labās puses uzbrucējs</option>
                     <option value="First_tempo">Centra uzbrucējs</option>
@@ -44,21 +45,21 @@
                 </select>
             </div>
             <div>
-                <label class="block text-gray-700 font-medium mb-2" for="team_id">Komanda *</label>
+                <label class="block text-gray-700 font-medium mb-2" for="team_id">Komanda *</label> {# Dinamiska komandas izvēle #}
                 <select id="team_id" name="team_id" required
                     class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     <option value="">Izvēlies...</option>
-                    {% for team in teams %}
-                    <option value="{{ team.id }}">{{ team.name }}</option>
+                    {% for team in teams %} {# Cilpa caur visām datubāzes komandām #}
+                    <option value="{{ team.id }}">{{ team.name }}</option> {# Katras komandas nosaukums #}
                     {% endfor %}
                 </select>
             </div>
             <div>
-                <label class="block text-gray-700 font-medium mb-2" for="phone">Telefons</label>
+                <label class="block text-gray-700 font-medium mb-2" for="phone">Telefons</label> {# Brīvprātīgs telefona lauks #}
                 <input type="text" id="phone" name="phone"
                     class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
             </div>
-            <div class="flex items-end">
+            <div class="flex items-end"> {# Poga rindas beigās #}
                 <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg transition">
                     Pievienot
                 </button>
@@ -66,11 +67,11 @@
         </form>
     </div>
 
-    {#speletaju saraksts#}
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full">
-                <thead class="bg-gray-800 text-white">
+    {# SARAKSTA SEKCIJA #}
+    <div class="bg-white rounded-lg shadow-md overflow-hidden"> {# Konteiners tabulai #}
+        <div class="overflow-x-auto"> {# Iespējo horizontālo skrollēšanu mobilajās ierīcēs #}
+            <table class="w-full"> {# Tabula pilnā platumā #}
+                <thead class="bg-gray-800 text-white"> {# Tumša tabulas galvene #}
                     <tr>
                         <th class="px-4 py-3 text-left">ID</th>
                         <th class="px-4 py-3 text-left">Vārds</th>
@@ -82,22 +83,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for player in players %}
-                    <tr class="border-b hover:bg-gray-50">
-                        <td class="px-4 py-3 text-gray-500">#{{ player.id }}</td>
-                        <td class="px-4 py-3 font-medium">{{ player.first_name }}</td>
-                        <td class="px-4 py-3 font-medium">{{ player.last_name }}</td>
+                    {% for player in players %} {# Cilpa caur visiem spēlētājiem #}
+                    <tr class="border-b hover:bg-gray-50"> {# Rinda ar apakšējo svītru un krāsas maiņu uz hover #}
+                        <td class="px-4 py-3 text-gray-500">#{{ player.id }}</td> {# Spēlētāja ID #}
+                        <td class="px-4 py-3 font-medium">{{ player.first_name }}</td> {# Vārds #}
+                        <td class="px-4 py-3 font-medium">{{ player.last_name }}</td> {# Uzvārds #}
                         <td class="px-4 py-3">
-                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">{{ player.position }}</span>
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">{{ player.position }}</span> {# Pozīcija kā nozīmīte #}
                         </td>
-                        <td class="px-4 py-3">{{ player.team_name }}</td>
-                        <td class="px-4 py-3 text-gray-500">{{ player.phone or '-' }}</td>
+                        <td class="px-4 py-3">{{ player.team_name }}</td> {# Piederība komandai #}
+                        <td class="px-4 py-3 text-gray-500">{{ player.phone or '-' }}</td> {# Telefons vai domuzīme, ja tukšs #}
                         <td class="px-4 py-3 text-center">
-                            <div class="flex justify-center space-x-2">
+                            <div class="flex justify-center space-x-2"> {# Darbību pogu konteiners #}
                                 <a href="{{ url_for('edit_player', id=player.id) }}"
                                     class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition">
-                                    Rediģēt
+                                    Rediģēt {# Poga rediģēšanai #}
                                 </a>
+                                {# Dzēšanas forma ar apstiprinājuma logu #}
                                 <form method="POST" action="{{ url_for('delete_player', id=player.id) }}"
                                     onsubmit="return confirm('Vai tiešām vēlies izdzēst šo spēlētāju?');">
                                     <button type="submit"
@@ -113,6 +115,7 @@
             </table>
         </div>
 
+        {# Paziņojums, ja saraksts ir tukšs #}
         {% if not players %}
         <div class="p-12 text-center text-gray-500">
             Nav spēlētāju. Izmanto formu augstāk, lai pievienotu pirmo spēlētāju.
